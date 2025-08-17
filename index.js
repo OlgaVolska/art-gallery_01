@@ -65,16 +65,17 @@ function nextImage() {
   modalImg.id = images[nextItem].id; // update id
 }
 
-// выход из модалки
+
 const closeIcon = document.querySelector("#close-icon");
 closeIcon.addEventListener("click", () => {
   modalBox.classList = "hidden";
 });
 
-// или так
+
 const body = document.body;
 body.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     modalBox.classList = "hidden";
   }
 });
+
