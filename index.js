@@ -1,4 +1,4 @@
-//массив изображений, с которого генерируется разметка
+//array of images
 const items = [
   { id: "cottonbro-1", src: "images/сottonbro-1.jpg" },
   { id: "cottonbro-11", src: "images/сottonbro-11.jpg" },
@@ -14,104 +14,56 @@ const items = [
   { id: "cottonbro-8", src: "images/сottonbro-8.jpg" },
 ];
 
-//находим GALLERY - contаiner для будущих изображений
+//find GALLERY - contаiner for future images
 const gallery = document.querySelector("#gallery");
+// find modal window
+const modalBox = document.querySelector("#modal-box");
+const modalImg = document.querySelector("#modal-img"); // big image(modal)
 
-// перебираем массив ITEMS и добавляем каждый item в галерею
+// iterate array ITEMS, add each item in gallery
 items.forEach((item) => {
-  //создаем img element
+  //create img element
   let img = document.createElement("img");
   img.src = item.src;
   img.id = item.id;
   img.classList = "gallery-img";
-  // добавляем image в gallery
+  // add image in gallery
   gallery.appendChild(img);
-});
 
-// чтобы дальше работать с фоографиями в галерее, нужно сделать из них массив
-
-// находим фотографии
-const img = gallery.children;
-// создаем массив из фотографий
-const images = Array.from(img);
-
-// находим модалку
-const modalBox = document.querySelector("#modal-box");
-const modalImg = document.querySelector("#modal-img"); // big image(modal)
-
-// перебираем массив
-// по клику на фото, открываем его в модальном окне
-
-let curIndexPhoto;
-
-images.forEach((img, index) => {
+  // when we click on photo, photo open in modal window
   img.addEventListener("click", () => {
     modalBox.classList = "visible";
     modalImg.classList = "imgBig";
     modalImg.src = img.src;
-    curIndexPhoto = index;
+    modalImg.id = img.id;
   });
 });
 
-// находим стрелки и вешаем на них событие клик
+// We must create image Array, to continue working with photos
+
+// find all images
+const img = gallery.children;
+// create array
+const images = Array.from(img);
+
+// find arrows
 const arrowRight = document.querySelector(".arrow-right");
 const arrowLeft = document.querySelector(".arrow-left");
 
-// arrowRight.addEventListener("click", nextImage);
 arrowRight.addEventListener("click", nextImage);
 
 function nextImage() {
-  // увеличиваем индекс на 1. чтобы листать вперед
-  curIndexPhoto++;
+  //find current index, use ID
+  let curIndex = images.findIndex((img) => img.id === modalImg.id);
 
-  if (curIndexPhoto >= images.length) {
-    // если дошли до конца массива
-    curIndexPhoto = 0; // начинаем с первого элемента
+  let nextItem = curIndex + 1; // increase current index to go to next image
+  if (nextItem >= images.length) {
+    // if we are at the end of the gallery
+    nextItem = 0; // start with first element
   }
-  // изображение в модальном окне будет равно выбранному элементу в массиве
-  modalImg.src = images[curIndexPhoto].src;
+  modalImg.src = images[nextItem].src; // modal img will be equal selected img in gallery
+  modalImg.id = images[nextItem].id; // update id
 }
-
-arrowLeft.addEventListener("click", previousImage);
-
-function previousImage() {
-  //  уменьшаем индекс на 1 чтобы листать назад
-  curIndexPhoto--;
-
-  if (curIndexPhoto < 0) {
-    // если дошли до первого элемента
-    curIndexPhoto = images.length - 1; // начинам с последнего
-  }
-  modalImg.src = images[curIndexPhoto].src;
-}
-
-// function nextImage() {
-//   let nextItem;
-//   for (let i = 0; i < images.length; i++) {
-//     if (modalImg.src === images[i].src) {
-//       nextItem = img[i + 1];
-//     }
-//   }
-//   if (nextItem === undefined) {
-//     modalImg.src = images[0].src;
-//   } else {
-//     modalImg.src = nextItem.src;
-//   }
-// }
-
-// function previousImage() {
-//   let previousItem;
-//   for (let i = 0; i < images.length; i++) {
-//     if (modalImg.src === images[i].src) {
-//       previousItem = img[i - 1];
-//     }
-//   }
-//   if (previousItem === undefined) {
-//     modalImg.src = images.at(-1).src;
-//   } else {
-//     modalImg.src = previousItem.src;
-//   }
-// }
 
 // выход из модалки
 const closeIcon = document.querySelector("#close-icon");
